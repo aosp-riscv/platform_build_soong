@@ -469,6 +469,9 @@ type ApexFileProperties struct {
 		X86_64 struct {
 			Src *string `android:"path"`
 		}
+		Riscv64 struct {
+			Src *string `android:"path"`
+		}
 	}
 }
 
@@ -494,6 +497,10 @@ func (p *ApexFileProperties) prebuiltApexSelector(ctx android.BaseModuleContext,
 		src = String(p.Arch.X86.Src)
 	case android.X86_64:
 		src = String(p.Arch.X86_64.Src)
+	// FIXME: for those prebuilt_apex riscv64 variation, just use binaries(apex files)
+	// from arm64 to pass build, need to replace with correct files finally
+	case android.Riscv64:
+		src = String(p.Arch.Riscv64.Src)
 	}
 	if src == "" {
 		src = String(p.Src)

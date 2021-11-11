@@ -44,6 +44,9 @@ module {
         x86_64: {
             // Host or device variants with x86_64 architecture
         },
+		riscv64: {
+            // Host or device variants with riscv64 architecture
+        },
     },
     multilib: {
         lib32: {
@@ -147,6 +150,7 @@ var (
 	Arm64  = newArch("arm64", "lib64")
 	X86    = newArch("x86", "lib32")
 	X86_64 = newArch("x86_64", "lib64")
+	Riscv64 = newArch("riscv64", "lib64")
 
 	Common = ArchType{
 		Name: COMMON_VARIANT,
@@ -334,7 +338,7 @@ var (
 	Windows = newOsType("windows", Host, true, X86, X86_64)
 	// Android is the OS for target devices that run all of Android, including the Linux kernel
 	// and the Bionic libc runtime.
-	Android = newOsType("android", Device, false, Arm, Arm64, X86, X86_64)
+	Android = newOsType("android", Device, false, Arm, Arm64, X86, X86_64, Riscv64)
 	// Fuchsia is the OS for target devices that run Fuchsia.
 	Fuchsia = newOsType("fuchsia", Device, false, Arm64, X86_64)
 
@@ -599,7 +603,7 @@ func GetOsSpecificVariantsOfCommonOSVariant(mctx BaseModuleContext) []Module {
 //      target.host.compile_multilib).
 //    - The default multilib passed to InitAndroidArchModule if compile_multilib was not set.
 // Valid multilib values include:
-//    "both": compile for all Targets supported by the OsClass (generally x86_64 and x86, or arm64 and arm).
+//    "both": compile for all Targets supported by the OsClass (generally x86_64 and x86, or arm64 and arm, or riscv64).
 //    "first": compile for only a single preferred Target supported by the OsClass.  This is generally x86_64 or arm64,
 //        but may be arm for a 32-bit only build.
 //    "32": compile for only a single 32-bit Target supported by the OsClass.
@@ -1547,6 +1551,7 @@ func getNdkAbisConfig() []archConfig {
 		{"arm64", "armv8-a-branchprot", "", []string{"arm64-v8a"}},
 		{"x86", "", "", []string{"x86"}},
 		{"x86_64", "", "", []string{"x86_64"}},
+		{"riscv64", "", "", []string{"riscv64"}},
 	}
 }
 
@@ -1557,6 +1562,7 @@ func getAmlAbisConfig() []archConfig {
 		{"arm64", "armv8-a", "", []string{"arm64-v8a"}},
 		{"x86", "", "", []string{"x86"}},
 		{"x86_64", "", "", []string{"x86_64"}},
+		{"riscv64", "", "", []string{"riscv64"}},
 	}
 }
 
