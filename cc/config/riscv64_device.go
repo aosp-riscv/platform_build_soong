@@ -27,6 +27,7 @@ var (
 		"-Wno-implicit-int-float-conversion",
 		"-Wno-deprecated-copy",
 		"-Wno-implicit-fallthrough",
+		"-mno-relax",
 	}
 
 	riscv64ClangCflags = append(riscv64Cflags, []string{
@@ -114,7 +115,9 @@ func (t *toolchainRiscv64) ToolchainClangCflags() string {
 }
 
 func (t *toolchainRiscv64) ClangAsflags() string {
-	return "-fno-integrated-as"
+	//return "-fno-integrated-as"
+	// -fno-integrated-as shuold not be used, otherwise -mno-relax would not take effect
+	return ""
 }
 
 func (t *toolchainRiscv64) ClangCflags() string {
