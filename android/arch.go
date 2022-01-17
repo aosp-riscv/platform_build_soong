@@ -38,14 +38,14 @@ module {
         arm64: {
             // Host or device variants with arm64 architecture
         },
+        riscv64: {
+            // Host or device variants with riscv64 architecture
+        },
         x86: {
             // Host or device variants with x86 architecture
         },
         x86_64: {
             // Host or device variants with x86_64 architecture
-        },
-		riscv64: {
-            // Host or device variants with riscv64 architecture
         },
     },
     multilib: {
@@ -93,7 +93,7 @@ module {
 
 // An Arch indicates a single CPU architecture.
 type Arch struct {
-	// The type of the architecture (arm, arm64, x86, or x86_64).
+	// The type of the architecture (arm, arm64, riscv64, x86, or x86_64).
 	ArchType ArchType
 
 	// The variant of the architecture, for example "armv7-a" or "armv7-a-neon" for arm.
@@ -126,7 +126,7 @@ func (a Arch) String() string {
 // well as the "common" architecture used for modules that support multiple architectures, for
 // example Java modules.
 type ArchType struct {
-	// Name is the name of the architecture type, "arm", "arm64", "x86", or "x86_64".
+	// Name is the name of the architecture type, "arm", "arm64", "riscv64", "x86", or "x86_64".
 	Name string
 
 	// Field is the name of the field used in properties that refer to the architecture, e.g. "Arm64".
@@ -148,9 +148,9 @@ var (
 
 	Arm    = newArch("arm", "lib32")
 	Arm64  = newArch("arm64", "lib64")
+	Riscv64  = newArch("riscv64", "lib64")
 	X86    = newArch("x86", "lib32")
 	X86_64 = newArch("x86_64", "lib64")
-	Riscv64 = newArch("riscv64", "lib64")
 
 	Common = ArchType{
 		Name: COMMON_VARIANT,
@@ -338,7 +338,7 @@ var (
 	Windows = newOsType("windows", Host, true, X86, X86_64)
 	// Android is the OS for target devices that run all of Android, including the Linux kernel
 	// and the Bionic libc runtime.
-	Android = newOsType("android", Device, false, Arm, Arm64, X86, X86_64, Riscv64)
+	Android = newOsType("android", Device, false, Arm, Arm64, Riscv64, X86, X86_64)
 	// Fuchsia is the OS for target devices that run Fuchsia.
 	Fuchsia = newOsType("fuchsia", Device, false, Arm64, X86_64)
 
@@ -1549,9 +1549,9 @@ func getNdkAbisConfig() []archConfig {
 	return []archConfig{
 		{"arm", "armv7-a", "", []string{"armeabi-v7a"}},
 		{"arm64", "armv8-a-branchprot", "", []string{"arm64-v8a"}},
+		{"riscv64", "", "", []string{"riscv64"}},
 		{"x86", "", "", []string{"x86"}},
 		{"x86_64", "", "", []string{"x86_64"}},
-		{"riscv64", "", "", []string{"riscv64"}},
 	}
 }
 
@@ -1560,9 +1560,9 @@ func getAmlAbisConfig() []archConfig {
 	return []archConfig{
 		{"arm", "armv7-a-neon", "", []string{"armeabi-v7a"}},
 		{"arm64", "armv8-a", "", []string{"arm64-v8a"}},
+		{"riscv64", "", "", []string{"riscv64"}},
 		{"x86", "", "", []string{"x86"}},
 		{"x86_64", "", "", []string{"x86_64"}},
-		{"riscv64", "", "", []string{"riscv64"}},
 	}
 }
 

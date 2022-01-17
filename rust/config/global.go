@@ -37,9 +37,9 @@ var (
 	StdEnvArch = map[android.ArchType]string{
 		android.Arm:    "arm",
 		android.Arm64:  "aarch64",
+		android.Riscv64: "riscv64",
 		android.X86:    "x86",
 		android.X86_64: "x86_64",
-		android.Riscv64: "riscv64",
 	}
 
 	GlobalRustFlags = []string{

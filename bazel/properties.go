@@ -173,9 +173,9 @@ const (
 	// ArchType names in arch.go
 	ARCH_ARM    = "arm"
 	ARCH_ARM64  = "arm64"
+	ARCH_RISCV64= "riscv64"
 	ARCH_X86    = "x86"
 	ARCH_X86_64 = "x86_64"
-	ARCH_RISCV64 = "riscv64"
 
 	// OsType names in arch.go
 	OS_ANDROID      = "android"
@@ -206,9 +206,9 @@ var (
 	PlatformArchMap = map[string]string{
 		ARCH_ARM:           "//build/bazel/platforms/arch:arm",
 		ARCH_ARM64:         "//build/bazel/platforms/arch:arm64",
+		ARCH_RISCV64:       "//build/bazel/platforms/arch:riscv64",
 		ARCH_X86:           "//build/bazel/platforms/arch:x86",
 		ARCH_X86_64:        "//build/bazel/platforms/arch:x86_64",
-		ARCH_RISCV64:	    "//build/bazel/platforms/arch:riscv64",
 		CONDITIONS_DEFAULT: "//conditions:default", // The default condition of as arch select map.
 	}
 
@@ -231,12 +231,12 @@ type Attribute interface {
 
 // Represents an attribute whose value is a single label
 type LabelAttribute struct {
-	Value   Label
-	X86     Label
-	X86_64  Label
-	Arm     Label
-	Arm64   Label
-	Riscv64 Label
+	Value  Label
+	X86    Label
+	X86_64 Label
+	Arm    Label
+	Arm64  Label
+	Riscv64  Label
 }
 
 func (attr *LabelAttribute) GetValueForArch(arch string) Label {
@@ -245,12 +245,12 @@ func (attr *LabelAttribute) GetValueForArch(arch string) Label {
 		return attr.Arm
 	case ARCH_ARM64:
 		return attr.Arm64
+	case ARCH_RISCV64:
+		return attr.Riscv64
 	case ARCH_X86:
 		return attr.X86
 	case ARCH_X86_64:
 		return attr.X86_64
-	case ARCH_RISCV64:
-		return attr.Riscv64
 	case CONDITIONS_DEFAULT:
 		return attr.Value
 	default:
@@ -264,30 +264,30 @@ func (attr *LabelAttribute) SetValueForArch(arch string, value Label) {
 		attr.Arm = value
 	case ARCH_ARM64:
 		attr.Arm64 = value
+	case ARCH_RISCV64:
+		attr.Riscv64 = value
 	case ARCH_X86:
 		attr.X86 = value
 	case ARCH_X86_64:
 		attr.X86_64 = value
-	case ARCH_RISCV64:
-		attr.Riscv64 = value
 	default:
 		panic("Invalid arch type")
 	}
 }
 
 func (attr LabelAttribute) HasConfigurableValues() bool {
-	return attr.Arm.Label != "" || attr.Arm64.Label != "" || attr.X86.Label != "" || attr.X86_64.Label != "" || attr.Riscv64.Label != ""
+	return attr.Arm.Label != "" || attr.Arm64.Label != "" || attr.Riscv64.Label != "" || attr.X86.Label != "" || attr.X86_64.Label != ""
 }
 
 // Arch-specific label_list typed Bazel attribute values. This should correspond
 // to the types of architectures supported for compilation in arch.go.
 type labelListArchValues struct {
-	X86     LabelList
-	X86_64  LabelList
-	Arm     LabelList
-	Arm64   LabelList
-	Riscv64 LabelList
-	Common  LabelList
+	X86    LabelList
+	X86_64 LabelList
+	Arm    LabelList
+	Arm64  LabelList
+	Riscv64  LabelList
+	Common LabelList
 
 	ConditionsDefault LabelList
 }
@@ -368,7 +368,7 @@ func (attrs *LabelListAttribute) archValuePtrs() map[string]*LabelList {
 		ARCH_X86_64:        &attrs.ArchValues.X86_64,
 		ARCH_ARM:           &attrs.ArchValues.Arm,
 		ARCH_ARM64:         &attrs.ArchValues.Arm64,
-		ARCH_RISCV64:	    &attrs.ArchValues.Riscv64,
+		ARCH_RISCV64:       &attrs.ArchValues.Riscv64,
 		CONDITIONS_DEFAULT: &attrs.ArchValues.ConditionsDefault,
 	}
 }
@@ -447,12 +447,12 @@ func MakeStringListAttribute(value []string) StringListAttribute {
 // Arch-specific string_list typed Bazel attribute values. This should correspond
 // to the types of architectures supported for compilation in arch.go.
 type stringListArchValues struct {
-	X86     []string
-	X86_64  []string
-	Arm     []string
-	Arm64   []string
-	Riscv64 []string
-	Common  []string
+	X86    []string
+	X86_64 []string
+	Arm    []string
+	Arm64  []string
+	Riscv64  []string
+	Common []string
 
 	ConditionsDefault []string
 }
@@ -491,7 +491,7 @@ func (attrs *StringListAttribute) archValuePtrs() map[string]*[]string {
 		ARCH_X86_64:        &attrs.ArchValues.X86_64,
 		ARCH_ARM:           &attrs.ArchValues.Arm,
 		ARCH_ARM64:         &attrs.ArchValues.Arm64,
-		ARCH_RISCV64:	    &attrs.ArchValues.Riscv64,
+		ARCH_RISCV64:       &attrs.ArchValues.Riscv64,
 		CONDITIONS_DEFAULT: &attrs.ArchValues.ConditionsDefault,
 	}
 }
