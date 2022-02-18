@@ -62,8 +62,6 @@ func init() {
 	pctx.SourcePathVariable("Riscv64GccRoot",
 		"prebuilts/gcc/${HostPrebuiltTag}/riscv64/riscv64-linux-android-${riscv64GccVersion}")
 
-	pctx.StaticVariable("Riscv64IncludeFlags", bionicHeaders("riscv"))
-
 	// Clang cflags
 	pctx.StaticVariable("Riscv64ClangCflags", strings.Join(ClangFilterUnknownCflags(riscv64ClangCflags), " "))
 	pctx.StaticVariable("Riscv64ClangLdflags", strings.Join(ClangFilterUnknownCflags(riscv64Ldflags), " "))
@@ -103,7 +101,7 @@ func (t *toolchainRiscv64) GccVersion() string {
 }
 
 func (t *toolchainRiscv64) IncludeFlags() string {
-	return "${config.Riscv64IncludeFlags}"
+	return ""
 }
 
 func (t *toolchainRiscv64) ClangTriple() string {
@@ -115,7 +113,6 @@ func (t *toolchainRiscv64) ToolchainClangCflags() string {
 }
 
 func (t *toolchainRiscv64) ClangAsflags() string {
-	//return "-fno-integrated-as"
 	// -fno-integrated-as shuold not be used, otherwise -mno-relax would not take effect
 	return ""
 }
@@ -150,14 +147,4 @@ func riscv64ToolchainFactory(arch android.Arch) Toolchain {
 
 func init() {
 	registerToolchainFactory(android.Android, android.Riscv64, riscv64ToolchainFactory)
-}
-
-func bionicHeaders(kernelArch string) string {
-	return strings.Join([]string{
-		"-isystem bionic/libc/include",
-		"-isystem bionic/libc/kernel/uapi",
-		"-isystem bionic/libc/kernel/uapi/asm-riscv64",
-		"-isystem bionic/libc/kernel/android/scsi",
-		"-isystem bionic/libc/kernel/android/uapi",
-	}, " ")
 }

@@ -1550,6 +1550,9 @@ func getNdkAbisConfig() []archConfig {
 		{"arm", "armv7-a", "", []string{"armeabi-v7a"}},
 		{"arm64", "armv8-a-branchprot", "", []string{"arm64-v8a"}},
 		{"riscv64", "", "", []string{"riscv64"}},
+		{"riscv64", "rv64imafc", "", []string{"riscv64"}},
+		{"riscv64", "rv64imafdc", "", []string{"riscv64"}},
+		{"riscv64", "rv64imac", "c910", []string{"riscv64"}},
 		{"x86", "", "", []string{"x86"}},
 		{"x86_64", "", "", []string{"x86_64"}},
 	}
