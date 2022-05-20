@@ -60,7 +60,7 @@ var (
 	// used, but have no effect on assembly files
 	cfiAsflags = []string{"-flto", "-fvisibility=default"}
 	cfiLdflags = []string{"-flto", "-fsanitize-cfi-cross-dso", "-fsanitize=cfi",
-		"-Wl,-plugin-opt,O1"}
+		"-Wl,-plugin-opt,O1", "-Wl,-plugin-opt=-target-abi=lp64d", "-Wl,-plugin-opt,-mattr=+d"}
 	cfiExportsMapPath = "build/soong/cc/config/cfi_exports.map"
 
 	intOverflowCflags = []string{"-fsanitize-blacklist=build/soong/cc/config/integer_overflow_blocklist.txt"}
