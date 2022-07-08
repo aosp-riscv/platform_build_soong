@@ -23,13 +23,16 @@ import (
 var (
 	Riscv64RustFlags            = []string{}
 	Riscv64ArchFeatureRustFlags = map[string][]string{}
-	Riscv64LinkFlags            = []string{}
+	Riscv64LinkFlags            = []string{
+		"-Wl,--icf=safe",
+		"-Wl,-z,max-page-size=4096",
 
-	Riscv64ArchVariantRustFlags = map[string][]string{
-		"imafdc": []string{
-			"-march=rv64imafdc",
-		},
+		"-Wl,-z,separate-code",
 	}
+
+	//Riscv64ArchVariantRustFlags = map[string][]string{
+	//	"c910": []string{},
+	//}
 )
 
 func init() {
@@ -38,10 +41,10 @@ func init() {
 	pctx.StaticVariable("Riscv64ToolchainRustFlags", strings.Join(Riscv64RustFlags, " "))
 	pctx.StaticVariable("Riscv64ToolchainLinkFlags", strings.Join(Riscv64LinkFlags, " "))
 
-	for variant, rustFlags := range Riscv64ArchVariantRustFlags {
-		pctx.StaticVariable("Riscv64"+variant+"VariantRustFlags",
-			strings.Join(rustFlags, " "))
-	}
+	//for variant, rustFlags := range Riscv64ArchVariantRustFlags {
+	//	pctx.StaticVariable("Riscv64"+variant+"VariantRustFlags",
+	//		strings.Join(rustFlags, " "))
+	//}
 
 }
 
@@ -55,8 +58,6 @@ func (t *toolchainRiscv64) RustTriple() string {
 }
 
 func (t *toolchainRiscv64) ToolchainLinkFlags() string {
-	// Prepend the lld flags from cc_config so we stay in sync with cc
-	//return "${config.DeviceGlobalLinkFlags} ${cc_config.Riscv64Lldflags} ${config.Riscv64ToolchainLinkFlags}"
 	return "${config.DeviceGlobalLinkFlags} ${config.Riscv64ToolchainLinkFlags}"
 }
 
@@ -77,16 +78,9 @@ func (toolchainRiscv64) LibclangRuntimeLibraryArch() string {
 }
 
 func Riscv64ToolchainFactory(arch android.Arch) Toolchain {
-	archVariant := arch.ArchVariant
-	if archVariant == "" {
-		// arch variants defaults to imafdc. This is mostly for
-		// the host target which borrows toolchain configs from here.
-		archVariant = "imafdc"
-	}
-
 	toolchainRustFlags := []string{
 		"${config.Riscv64ToolchainRustFlags}",
-		"${config.Riscv64" + archVariant + "VariantRustFlags}",
+		//"${config.Riscv64" + arch.ArchVariant + "VariantRustFlags}",
 	}
 
 	toolchainRustFlags = append(toolchainRustFlags, deviceGlobalRustFlags...)

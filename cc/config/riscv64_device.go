@@ -113,7 +113,6 @@ func (t *toolchainRiscv64) ToolchainClangCflags() string {
 }
 
 func (t *toolchainRiscv64) ClangAsflags() string {
-	// -fno-integrated-as shuold not be used, otherwise -mno-relax would not take effect
 	return ""
 }
 
